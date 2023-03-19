@@ -55,7 +55,7 @@ ext {
         hamcrest                    : '2.2',
         mockito                     : '3.3.3',
         powermock                   : '2.0.7',
-        robolectric                 : '4.3.1',
+        robolectric                 : '4.9.2',
         base64                      : '2.3.9'
     ]
 }
@@ -67,8 +67,8 @@ allprojects {
             jcenter()
         }
         dependencies {
-            classpath 'com.android.tools.build:gradle:3.6.3'
-            classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:1.0.2'
+            classpath 'com.android.tools.build:gradle:7.2.2'
+            classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:1.0.3'
         }
     }
 
@@ -135,6 +135,16 @@ subprojects {
                         }
                     }
                 }
+            }
+        }
+
+        tasks.withType(Test).all {
+            // We add --add-opens flags to make sure we can run PowerMock tests on JDK >= 17
+            if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
+                jvmArgs += [
+                        '--add-opens=java.base/java.lang=ALL-UNNAMED',
+                        '--add-opens=java.base/java.util=ALL-UNNAMED',
+                ]
             }
         }
     }
