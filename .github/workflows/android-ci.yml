@@ -23,6 +23,8 @@ jobs:
 
       - name: Run Lint checks and tests
         run: ./gradlew --no-daemon --parallel clean lintGmsDebug testGmsDebug lintFlossDebug testFlossDebug
+
+      - uses: actions/upload-artifact@v3
         with:
           name: app-debug.apk
           path: app/build/outputs/apk/debug/app-debug.apk
