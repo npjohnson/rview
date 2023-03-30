@@ -700,6 +700,20 @@ public class ChangeDetailsFragment extends Fragment implements
 
             mMessages = filterTaggedMessages(filterCiAccountsMessages(change.messages));
 
+            for (ChangeMessageInfo changeMessageInfo : change.messages) {
+                if (mMessagesWithComments.containsKey(changeMessageInfo.id)) {
+                    LinkedHashMap<String, List<CommentInfo>> comments =
+                            mMessagesWithComments.get(changeMessageInfo.id);
+                    if (comments.containsKey("/PATCHSET_LEVEL")) {
+                        changeMessageInfo.message = changeMessageInfo.message.replaceFirst(
+                                "\\(\\d+ comment\\)",
+                                comments.get("/PATCHSET_LEVEL").get(0).message
+                        );
+                        comments.remove("/PATCHSET_LEVEL");
+                    }
+                }
+            }
+
             int count = mMessages.length;
             boolean[] old = mFolded;
             mFolded = new boolean[count];
